@@ -1,4 +1,4 @@
-package com.service.datapoa.crud.jpa;
+package com.service.datapoa.crud.pontotaxi.jpa;
 
 import org.springframework.data.repository.CrudRepository;
 

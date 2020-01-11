@@ -1,7 +1,7 @@
 package com.service.datapoa.crud;
 
-import com.service.datapoa.crud.jpa.PontoTaxi;
-import com.service.datapoa.crud.jpa.PontoTaxiRepository;
+import com.service.datapoa.crud.pontotaxi.jpa.PontoTaxi;
+import com.service.datapoa.crud.pontotaxi.jpa.PontoTaxiRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
