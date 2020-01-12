@@ -1,5 +1,6 @@
 package com.service.datapoa.crud.pontotaxi.rest;
 
+import com.service.datapoa.crud.Crud;
 import com.service.datapoa.crud.pontotaxi.dao.PontoTaxi;
 import com.service.datapoa.crud.pontotaxi.dao.PontoTaxiDAO;
 import com.service.datapoa.crud.pontotaxi.mapper.PontoTaxiMapper;
@@ -11,11 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PontoTaxiService {
+public class PontoTaxiService implements Crud<PontoTaxiModel> {
 
     @Autowired
     private PontoTaxiDAO dao;
 
+    @Override
     public PontoTaxiModel findById(long id) {
         final PontoTaxi ponto = this.dao.get(id);
 
@@ -30,6 +32,7 @@ public class PontoTaxiService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<PontoTaxiModel> findAll() {
         final List<PontoTaxi> pontos = this.dao.getAll();
 
@@ -38,18 +41,21 @@ public class PontoTaxiService {
             .collect(Collectors.toList());
     }
 
+    @Override
     public void add(PontoTaxiModel model) {
         final PontoTaxi ponto = new PontoTaxi(model.getName(), model.getLat(), model.getLng(), model.getRegisterTime());
 
         this.dao.save(ponto);
     }
 
+    @Override
     public void update(long id, PontoTaxiModel model) {
         final PontoTaxi ponto = this.dao.get(id);
         final String[] params = { model.getName(), model.getLat(), model.getLng() };
-        this.dao.update(ponto, (String[]) params);
+        this.dao.update(ponto, params);
     }
 
+    @Override
     public void delete(long id) {
         final PontoTaxi ponto = this.dao.get(id);
         this.dao.delete(ponto);
