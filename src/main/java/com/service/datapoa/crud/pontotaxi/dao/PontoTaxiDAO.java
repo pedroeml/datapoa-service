@@ -40,7 +40,8 @@ public class PontoTaxiDAO implements Dao<PontoTaxi> {
     @Override
     public void save(PontoTaxi pontoTaxi) {
         this.repository.save(pontoTaxi);
-        PontoTaxiPersistence.appendBackupFile(pontoTaxi);
+        // TODO: The line below shutdowns the application. Maybe Spring doesn't let to write to files in /resources?
+        // PontoTaxiPersistence.appendBackupFile(pontoTaxi);
     }
 
     @Override

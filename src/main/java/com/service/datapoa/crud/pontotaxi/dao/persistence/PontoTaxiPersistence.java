@@ -4,9 +4,7 @@ import com.service.datapoa.crud.pontotaxi.dao.jpa.PontoTaxi;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,10 +36,10 @@ public class PontoTaxiPersistence {
 
     public static void appendBackupFile(PontoTaxi ponto) {
         final Resource resource = new ClassPathResource(fileName);
-        try (FileOutputStream outputStream = new FileOutputStream(resource.getFile())) {
-            final String template = "%s#%s#%s#%s\r\n";
+        try (FileWriter writer = new FileWriter(resource.getFile(), StandardCharsets.UTF_8)) {
+            final String template = "%s#%s#%s#%s\n";
             final String line = String.format(template, ponto.getName(), ponto.getLat(), ponto.getLng(), ponto.getRegisterTime());
-            outputStream.write(line.getBytes());
+            writer.append(line);
         } catch (IOException e) {
             e.printStackTrace();
         }
