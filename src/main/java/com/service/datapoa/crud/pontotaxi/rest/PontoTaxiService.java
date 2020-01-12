@@ -43,7 +43,7 @@ public class PontoTaxiService implements Crud<PontoTaxiModel> {
 
     @Override
     public PontoTaxiModel add(PontoTaxiModel model) {
-        final PontoTaxi ponto = new PontoTaxi(model.getName(), model.getLat(), model.getLng(), model.getRegisterTime());
+        final PontoTaxi ponto = PontoTaxiMapper.mapToDAO(model);
         this.dao.save(ponto);
 
         return new PontoTaxiModel(ponto);
