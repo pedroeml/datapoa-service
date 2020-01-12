@@ -1,0 +1,30 @@
+package com.service.datapoa.crud.pontotaxi.rest;
+
+import com.service.datapoa.crud.pontotaxi.dto.PontoTaxiDTO;
+import com.service.datapoa.crud.pontotaxi.mapper.PontoTaxiMapper;
+import com.service.datapoa.crud.pontotaxi.model.PontoTaxiModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/pontosTaxi")
+public class PontoTaxiController {
+
+    @Autowired
+    private PontoTaxiService service;
+
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PontoTaxiDTO> pontos() {
+        final List<PontoTaxiModel> pontos = this.service.findAll();
+
+        return pontos.stream()
+            .map(PontoTaxiMapper::mapToDTO)
+            .collect(Collectors.toList());
+    }
+}
