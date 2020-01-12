@@ -1,4 +1,4 @@
-package com.service.datapoa.crud.pontotaxi.dao;
+package com.service.datapoa.crud.pontotaxi.dao.jpa;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,6 +1,6 @@
 package com.service.datapoa.crud.pontotaxi.model;
 
-import com.service.datapoa.crud.pontotaxi.dao.PontoTaxi;
+import com.service.datapoa.crud.pontotaxi.dao.jpa.PontoTaxi;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

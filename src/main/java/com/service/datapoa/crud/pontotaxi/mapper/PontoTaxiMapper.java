@@ -1,6 +1,6 @@
 package com.service.datapoa.crud.pontotaxi.mapper;
 
-import com.service.datapoa.crud.pontotaxi.dao.PontoTaxi;
+import com.service.datapoa.crud.pontotaxi.dao.jpa.PontoTaxi;
 import com.service.datapoa.crud.pontotaxi.dto.PontoTaxiDTO;
 import com.service.datapoa.crud.pontotaxi.model.PontoTaxiModel;
 

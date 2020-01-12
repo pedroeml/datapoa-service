@@ -1,6 +1,7 @@
 package com.service.datapoa.crud.pontotaxi.dao;
 
 import com.service.datapoa.crud.Dao;
+import com.service.datapoa.crud.pontotaxi.dao.jpa.PontoTaxi;
 import com.service.datapoa.crud.pontotaxi.dao.persistence.PontoTaxiPersistence;
 import com.service.datapoa.crud.pontotaxi.dao.jpa.PontoTaxiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,7 @@ public class PontoTaxiDAO implements Dao<PontoTaxi> {
     @Autowired
     public PontoTaxiDAO(PontoTaxiRepository repository) {
         this.repository = repository;
-        PontoTaxiPersistence.readBackupFile()
-            .forEach(this::save);
+        this.repository.saveAll(PontoTaxiPersistence.readBackupFile());
     }
 
     @Override
@@ -40,6 +40,7 @@ public class PontoTaxiDAO implements Dao<PontoTaxi> {
     @Override
     public void save(PontoTaxi pontoTaxi) {
         this.repository.save(pontoTaxi);
+        PontoTaxiPersistence.appendBackupFile(pontoTaxi);
     }
 
     @Override

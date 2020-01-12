@@ -20,7 +20,7 @@ public class PontoTaxiController {
     private PontoTaxiService service;
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PontoTaxiDTO> pontos() {
+    public List<PontoTaxiDTO> findAll() {
         final List<PontoTaxiModel> pontos = this.service.findAll();
 
         return pontos.stream()

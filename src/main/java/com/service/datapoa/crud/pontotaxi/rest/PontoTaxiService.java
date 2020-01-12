@@ -1,7 +1,7 @@
 package com.service.datapoa.crud.pontotaxi.rest;
 
 import com.service.datapoa.crud.Crud;
-import com.service.datapoa.crud.pontotaxi.dao.PontoTaxi;
+import com.service.datapoa.crud.pontotaxi.dao.jpa.PontoTaxi;
 import com.service.datapoa.crud.pontotaxi.dao.PontoTaxiDAO;
 import com.service.datapoa.crud.pontotaxi.mapper.PontoTaxiMapper;
 import com.service.datapoa.crud.pontotaxi.model.PontoTaxiModel;
@@ -28,8 +28,8 @@ public class PontoTaxiService implements Crud<PontoTaxiModel> {
         final List<PontoTaxi> pontos = this.dao.getByName(name);
 
         return pontos.stream()
-                .map(PontoTaxiMapper::mapToModel)
-                .collect(Collectors.toList());
+            .map(PontoTaxiMapper::mapToModel)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -42,22 +42,27 @@ public class PontoTaxiService implements Crud<PontoTaxiModel> {
     }
 
     @Override
-    public void add(PontoTaxiModel model) {
+    public PontoTaxiModel add(PontoTaxiModel model) {
         final PontoTaxi ponto = new PontoTaxi(model.getName(), model.getLat(), model.getLng(), model.getRegisterTime());
-
         this.dao.save(ponto);
+
+        return new PontoTaxiModel(ponto);
     }
 
     @Override
-    public void update(long id, PontoTaxiModel model) {
+    public PontoTaxiModel update(long id, PontoTaxiModel model) {
         final PontoTaxi ponto = this.dao.get(id);
         final String[] params = { model.getName(), model.getLat(), model.getLng() };
         this.dao.update(ponto, params);
+
+        return new PontoTaxiModel(ponto);
     }
 
     @Override
-    public void delete(long id) {
+    public PontoTaxiModel delete(long id) {
         final PontoTaxi ponto = this.dao.get(id);
         this.dao.delete(ponto);
+
+        return new PontoTaxiModel(ponto);
     }
 }
