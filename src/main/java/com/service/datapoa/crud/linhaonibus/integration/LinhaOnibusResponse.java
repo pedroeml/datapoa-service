@@ -1,14 +1,14 @@
-package com.service.datapoa.crud.linhaonibus.rest;
+package com.service.datapoa.crud.linhaonibus.integration;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LinhaOnibus {
+public class LinhaOnibusResponse {
     private String id;
     private String codigo;
     private String nome;
 
-    public LinhaOnibus() { }
+    public LinhaOnibusResponse() { }
 
     public String getId() {
         return id;
@@ -36,7 +36,7 @@ public class LinhaOnibus {
 
     @Override
     public String toString() {
-        final String template = "LinhaOnibus[id='%s', codigo='%s', nome='%s']";
+        final String template = "LinhaOnibusResponse[id='%s', codigo='%s', nome='%s']";
         return String.format(template, this.id, this.codigo, this.nome);
     }
 }
