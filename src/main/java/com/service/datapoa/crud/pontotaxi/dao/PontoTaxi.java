@@ -1,4 +1,4 @@
-package com.service.datapoa.crud.pontotaxi.jpa;
+package com.service.datapoa.crud.pontotaxi.dao;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,19 +29,31 @@ public class PontoTaxi {
     }
 
     public String getName() {
-        return this.name;
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLat() {
-        return this.lat;
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
     }
 
     public String getLng() {
-        return this.lng;
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
     }
 
     public String getRegisterTime() {
-        return this.registerTime;
+        return registerTime;
     }
 
     @Override
