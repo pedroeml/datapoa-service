@@ -7,5 +7,6 @@ public interface Crud<T> {
     List<T> findAll();
     T add(T t);
     T update(long id, T t);
+    T replace(long id, T t);
     T delete(long id);
 }

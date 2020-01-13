@@ -6,7 +6,9 @@ import com.service.datapoa.crud.pontotaxi.dao.PontoTaxiDAO;
 import com.service.datapoa.crud.pontotaxi.mapper.PontoTaxiMapper;
 import com.service.datapoa.crud.pontotaxi.model.PontoTaxiModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,11 +19,21 @@ public class PontoTaxiService implements Crud<PontoTaxiModel> {
     @Autowired
     private PontoTaxiDAO dao;
 
-    @Override
-    public PontoTaxiModel findById(long id) {
+    private PontoTaxi getById(long id) throws ResponseStatusException {
         final PontoTaxi ponto = this.dao.get(id);
 
-        return ponto != null ? PontoTaxiMapper.mapToModel(ponto) : null;
+        if (ponto == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("PontoTaxi ID %d not found", id));
+        }
+
+        return ponto;
+    }
+
+    @Override
+    public PontoTaxiModel findById(long id) {
+        final PontoTaxi ponto = this.getById(id);
+
+        return PontoTaxiMapper.mapToModel(ponto);
     }
 
     public List<PontoTaxiModel> findByName(String name) {
@@ -51,7 +63,7 @@ public class PontoTaxiService implements Crud<PontoTaxiModel> {
 
     @Override
     public PontoTaxiModel update(long id, PontoTaxiModel model) {
-        final PontoTaxi ponto = this.dao.get(id);
+        final PontoTaxi ponto = this.getById(id);
         final String[] params = { model.getName(), model.getLat(), model.getLng() };
         this.dao.update(ponto, params);
 
@@ -59,8 +71,14 @@ public class PontoTaxiService implements Crud<PontoTaxiModel> {
     }
 
     @Override
+    public PontoTaxiModel replace(long id, PontoTaxiModel model) {
+        final PontoTaxiModel ponto = this.delete(id);
+        return this.add(model);
+    }
+
+    @Override
     public PontoTaxiModel delete(long id) {
-        final PontoTaxi ponto = this.dao.get(id);
+        final PontoTaxi ponto = this.getById(id);
         this.dao.delete(ponto);
 
         return new PontoTaxiModel(ponto);
