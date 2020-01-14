@@ -24,6 +24,8 @@ public class LinhaOnibusService implements Crud<LinhaOnibusModel> {
 
     @Override
     public LinhaOnibusModel findById(long id) {
+        // TODO: Add handler for not finding an object with the specified ID
+        // TODO: Implementation
         return null;
     }
 
