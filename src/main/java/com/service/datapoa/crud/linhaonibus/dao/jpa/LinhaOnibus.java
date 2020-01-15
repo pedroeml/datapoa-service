@@ -1,32 +1,32 @@
 package com.service.datapoa.crud.linhaonibus.dao.jpa;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "LINHAS_ONIBUS")
-public class LinhaOnibus {
+public class LinhaOnibus implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private String id;
-    @Column(name = "CODIGO")
+    @Column(name = "ID", unique = true)
+    private int id;
+    @Column(name = "CODIGO", nullable = false)
     private String codigo;
-    @Column(name = "NOME")
+    @Column(name = "NOME", nullable = false)
     private String nome;
 
     protected LinhaOnibus() { }
 
-    public LinhaOnibus(String id, String codigo, String nome) {
-        this.id = id;
+    public LinhaOnibus(String codigo, String nome) {
         this.codigo = codigo;
         this.nome = nome;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -48,7 +48,7 @@ public class LinhaOnibus {
 
     @Override
     public String toString() {
-        final String template = "LinhaOnibus[id=%s, codigo='%s', nome='%s']";
+        final String template = "LinhaOnibus[id=%d, codigo='%s', nome='%s']";
         return String.format(template, this.id, this.codigo, this.nome);
     }
 }
