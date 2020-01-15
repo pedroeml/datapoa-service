@@ -1,6 +1,7 @@
 package com.service.datapoa.crud.linhaonibus.rest;
 
 import com.service.datapoa.crud.Crud;
+import com.service.datapoa.crud.linhaonibus.dao.LinhaOnibusDAO;
 import com.service.datapoa.crud.linhaonibus.integration.LinhaOnibusResponse;
 import com.service.datapoa.crud.linhaonibus.mapper.LinhaOnibusMapper;
 import com.service.datapoa.crud.linhaonibus.model.LinhaOnibusModel;
@@ -22,6 +23,9 @@ public class LinhaOnibusService implements Crud<LinhaOnibusModel> {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private LinhaOnibusDAO dao;
+
     @Override
     public LinhaOnibusModel findById(long id) {
         // TODO: Add handler for not finding an object with the specified ID
@@ -37,7 +41,7 @@ public class LinhaOnibusService implements Crud<LinhaOnibusModel> {
         // TODO: Add handler for finding objects with same ID in the MySQL DB
 
         return linhasResponse == null ? Collections.emptyList() : linhasResponse.stream()
-            .map(LinhaOnibusMapper::mapToModel)
+            .map(LinhaOnibusMapper::mapFromResponse)
             .collect(Collectors.toList());
     }
 
@@ -61,6 +65,7 @@ public class LinhaOnibusService implements Crud<LinhaOnibusModel> {
 
     @Override
     public LinhaOnibusModel delete(long id) {
+        // TODO: Call other DAO class for deleting entries on table ITINERARIO_UT with "DELETE FROM ITINERARIO_UT WHERE ID_LINHA = ?"
         // TODO: Implementation
         return null;
     }
