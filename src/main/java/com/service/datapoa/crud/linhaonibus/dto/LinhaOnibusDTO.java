@@ -3,7 +3,7 @@ package com.service.datapoa.crud.linhaonibus.dto;
 import com.service.datapoa.crud.linhaonibus.model.LinhaOnibusModel;
 
 public class LinhaOnibusDTO {
-    private final String id;
+    private final Integer id;
     private final String codigo;
     private final String nome;
 
@@ -13,7 +13,7 @@ public class LinhaOnibusDTO {
         this.nome = model.getNome();
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -27,7 +27,7 @@ public class LinhaOnibusDTO {
 
     @Override
     public String toString() {
-        final String template = "LinhaOnibusDTO[id='%s', codigo='%s', nome='%s']";
+        final String template = "LinhaOnibusDTO[id=%d, codigo='%s', nome='%s']";
         return String.format(template, this.id, this.codigo, this.nome);
     }
 }

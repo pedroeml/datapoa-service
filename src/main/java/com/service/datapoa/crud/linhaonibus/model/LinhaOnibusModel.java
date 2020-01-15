@@ -1,25 +1,32 @@
 package com.service.datapoa.crud.linhaonibus.model;
 
+import com.service.datapoa.crud.linhaonibus.dao.jpa.LinhaOnibus;
 import com.service.datapoa.crud.linhaonibus.integration.LinhaOnibusResponse;
 
 public class LinhaOnibusModel {
-    private final String id;
+    private final Integer id;
     private final String codigo;
     private final String nome;
 
-    public LinhaOnibusModel(String id, String codigo, String nome) {
-        this.id = id;
-        this.codigo = codigo;
-        this.nome = nome;
+    public LinhaOnibusModel(LinhaOnibus dao) {
+        this.id = dao.getId();
+        this.codigo = dao.getCodigo();
+        this.nome = dao.getNome();
     }
 
     public LinhaOnibusModel(LinhaOnibusResponse response) {
-        this.id = response.getId();
+        this.id = Integer.parseInt(response.getId());
         this.codigo = response.getCodigo();
         this.nome = response.getNome();
     }
 
-    public String getId() {
+    public LinhaOnibusModel(String codigo, String nome) {
+        this.id = null;
+        this.codigo = codigo;
+        this.nome = nome;
+    }
+
+    public Integer getId() {
         return id;
     }
 
