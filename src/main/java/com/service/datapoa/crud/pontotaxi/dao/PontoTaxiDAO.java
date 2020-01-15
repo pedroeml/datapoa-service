@@ -71,7 +71,7 @@ public class PontoTaxiDAO extends JdbcDaoSupport implements Dao<PontoTaxi> {
         PontoTaxi ponto = this.find(pontoTaxi);
 
         if (ponto == null) {
-            final String query = "INSERT INTO PONTOS_TAXI (NAME, LAT, LNG, REGISTER_TIME) VALUES (?, ?, ?, ?, ?)";
+            final String query = "INSERT INTO PONTOS_TAXI (NAME, LAT, LNG, REGISTER_TIME) VALUES (?, ?, ?, ?)";
             final Object[] entries = new Object[]{pontoTaxi.getName(), pontoTaxi.getLat(), pontoTaxi.getLng(), pontoTaxi.getRegisterTime()};
             try {
                 this.getJdbcTemplate().update(query, entries);
