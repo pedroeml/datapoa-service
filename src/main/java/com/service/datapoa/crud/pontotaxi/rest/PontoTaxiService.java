@@ -36,14 +36,6 @@ public class PontoTaxiService implements Crud<PontoTaxiModel> {
         return PontoTaxiMapper.mapToModel(ponto);
     }
 
-    public List<PontoTaxiModel> findByName(String name) {
-        final List<PontoTaxi> pontos = this.dao.getByName(name);
-
-        return pontos.stream()
-            .map(PontoTaxiMapper::mapToModel)
-            .collect(Collectors.toList());
-    }
-
     @Override
     public List<PontoTaxiModel> findAll() {
         final List<PontoTaxi> pontos = this.dao.getAll();

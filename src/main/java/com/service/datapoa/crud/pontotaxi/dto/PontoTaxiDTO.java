@@ -3,7 +3,7 @@ package com.service.datapoa.crud.pontotaxi.dto;
 import com.service.datapoa.crud.pontotaxi.model.PontoTaxiModel;
 
 public class PontoTaxiDTO {
-    private final Long id;
+    private final Integer id;
     private final String name;
     private final String lat;
     private final String lng;
@@ -17,7 +17,7 @@ public class PontoTaxiDTO {
         this.registerTime = model.getRegisterTime();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

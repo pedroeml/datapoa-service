@@ -1,18 +1,22 @@
 package com.service.datapoa.crud.pontotaxi.dao.jpa;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class PontoTaxi {
+@Table(name = "PONTOS_TAXI")
+public class PontoTaxi implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "ID", unique = true)
+    private int id;
+    @Column(name = "NAME", nullable = false)
     private String name;
+    @Column(name = "LAT", nullable = false)
     private String lat;
+    @Column(name = "LNG", nullable = false)
     private String lng;
+    @Column(name = "REGISTER_TIME", nullable = false)
     private String registerTime;
 
     protected PontoTaxi() { }
@@ -24,8 +28,12 @@ public class PontoTaxi {
         this.registerTime = registerTime;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -54,6 +62,10 @@ public class PontoTaxi {
 
     public String getRegisterTime() {
         return registerTime;
+    }
+
+    public void setRegisterTime(String registerTime) {
+        this.registerTime = registerTime;
     }
 
     @Override

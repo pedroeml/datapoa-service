@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PontoTaxiModel {
-    private final Long id;
+    private final Integer id;
     private final String name;
     private final String lat;
     private final String lng;
@@ -28,7 +28,7 @@ public class PontoTaxiModel {
         this.registerTime = this.getUTCDate();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

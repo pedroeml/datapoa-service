@@ -3,43 +3,87 @@ package com.service.datapoa.crud.pontotaxi.dao;
 import com.service.datapoa.crud.Dao;
 import com.service.datapoa.crud.pontotaxi.dao.jpa.PontoTaxi;
 import com.service.datapoa.crud.pontotaxi.dao.persistence.PontoTaxiPersistence;
-import com.service.datapoa.crud.pontotaxi.dao.jpa.PontoTaxiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Repository
-public class PontoTaxiDAO implements Dao<PontoTaxi> {
-    private final PontoTaxiRepository repository;
+public class PontoTaxiDAO extends JdbcDaoSupport implements Dao<PontoTaxi> {
 
     @Autowired
-    public PontoTaxiDAO(PontoTaxiRepository repository) {
-        this.repository = repository;
-        this.repository.saveAll(PontoTaxiPersistence.readBackupFile());
+    DataSource dataSource;
+
+    @PostConstruct
+    private void initialize() {
+        this.setDataSource(dataSource);
+        PontoTaxiPersistence.readBackupFile().forEach(this::save);
+    }
+
+    private PontoTaxi find(PontoTaxi pontoTaxi) {
+        final String query = "SELECT * FROM PONTOS_TAXI WHERE NAME = ? AND LAT = ? AND LNG = ?";
+        final Object[] entries = new Object[]{pontoTaxi.getName(), pontoTaxi.getLat(), pontoTaxi.getLng()};
+        PontoTaxi ponto;
+        try {
+            ponto = this.getJdbcTemplate().queryForObject(query, entries, new BeanPropertyRowMapper<>(PontoTaxi.class));
+        } catch (EmptyResultDataAccessException e) {
+            ponto = null;
+        }
+
+        return ponto;
     }
 
     @Override
     public PontoTaxi get(long id) {
-        return this.repository.findById(id);
-    }
+        final String query = "SELECT * FROM PONTOS_TAXI WHERE ID = ?";
+        PontoTaxi ponto;
+        try {
+            ponto = this.getJdbcTemplate().queryForObject(query, new Object[]{id}, new BeanPropertyRowMapper<>(PontoTaxi.class));
+        } catch (EmptyResultDataAccessException e) {
+            ponto = null;
+        }
 
-    public List<PontoTaxi> getByName(String name) {
-        return this.repository.findByName(name);
+        return ponto;
     }
 
     @Override
     public List<PontoTaxi> getAll() {
-        final Iterable<PontoTaxi> iterator = this.repository.findAll();
-        return StreamSupport.stream(iterator.spliterator(), false)
-            .collect(Collectors.toList());
+        final String query = "SELECT * FROM PONTOS_TAXI";
+        List<PontoTaxi> pontos;
+        try {
+            pontos = this.getJdbcTemplate().query(query, new BeanPropertyRowMapper<>(PontoTaxi.class));
+        } catch (DataAccessException e) {
+            pontos = Collections.emptyList();
+        }
+
+        return pontos;
     }
 
     @Override
     public void save(PontoTaxi pontoTaxi) {
-        this.repository.save(pontoTaxi);
+        PontoTaxi ponto = this.find(pontoTaxi);
+
+        if (ponto == null) {
+            final String query = "INSERT INTO PONTOS_TAXI (ID, NAME, LAT, LNG, REGISTER_TIME) VALUES (?, ?, ?, ?, ?)";
+            final Object[] entries = new Object[]{pontoTaxi.getId(), pontoTaxi.getName(), pontoTaxi.getLat(), pontoTaxi.getLng(), pontoTaxi.getRegisterTime()};
+            try {
+                this.getJdbcTemplate().update(query, entries);
+            } catch (DataAccessException e) {
+                e.printStackTrace();
+            } finally {
+                ponto = this.find(pontoTaxi);
+            }
+        }
+
+        pontoTaxi.setId(ponto.getId());
+        pontoTaxi.setRegisterTime(ponto.getRegisterTime());
         // TODO: The line below shutdowns the application. Maybe Spring doesn't let to write to files in /resources?
         // PontoTaxiPersistence.appendBackupFile(pontoTaxi);
     }
@@ -52,11 +96,24 @@ public class PontoTaxiDAO implements Dao<PontoTaxi> {
         pontoTaxi.setName(name);
         pontoTaxi.setLat(lat);
         pontoTaxi.setLng(lng);
-        repository.save(pontoTaxi);
+
+        final String query = "UPDATE PONTOS_TAXI SET NAME = ?, LAT = ?, LNG = ? WHERE ID = ?";
+        final Object[] entries = new Object[]{pontoTaxi.getName(), pontoTaxi.getLat(), pontoTaxi.getLng(), pontoTaxi.getId()};
+        try {
+            this.getJdbcTemplate().update(query, entries);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void delete(PontoTaxi pontoTaxi) {
-        this.repository.delete(pontoTaxi);
+        final String query = "DELETE FROM PONTOS_TAXI WHERE ID = ?";
+        final Object[] entries = new Object[]{pontoTaxi.getId()};
+        try {
+            this.getJdbcTemplate().update(query, entries);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
