@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  service:
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - datapoa-mysql
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - datapoa-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bootdb
+
+networks:
+  datapoa-mysql:
