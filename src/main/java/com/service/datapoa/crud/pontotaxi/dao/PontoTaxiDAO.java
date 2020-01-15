@@ -19,7 +19,7 @@ import java.util.List;
 public class PontoTaxiDAO extends JdbcDaoSupport implements Dao<PontoTaxi> {
 
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
 
     @PostConstruct
     private void initialize() {
@@ -90,12 +90,9 @@ public class PontoTaxiDAO extends JdbcDaoSupport implements Dao<PontoTaxi> {
 
     @Override
     public void update(PontoTaxi pontoTaxi, String[] params) {
-        final String name = params[0] == null ? pontoTaxi.getName() : params[0];
-        final String lat = params[1] == null ? pontoTaxi.getLat() : params[1];
-        final String lng = params[2] == null ? pontoTaxi.getLng() : params[2];
-        pontoTaxi.setName(name);
-        pontoTaxi.setLat(lat);
-        pontoTaxi.setLng(lng);
+        pontoTaxi.setName(params[0] == null ? pontoTaxi.getName() : params[0]);
+        pontoTaxi.setLat(params[1] == null ? pontoTaxi.getLat() : params[1]);
+        pontoTaxi.setLng(params[2] == null ? pontoTaxi.getLng() : params[2]);
 
         final String query = "UPDATE PONTOS_TAXI SET NAME = ?, LAT = ?, LNG = ? WHERE ID = ?";
         final Object[] entries = new Object[]{pontoTaxi.getName(), pontoTaxi.getLat(), pontoTaxi.getLng(), pontoTaxi.getId()};
