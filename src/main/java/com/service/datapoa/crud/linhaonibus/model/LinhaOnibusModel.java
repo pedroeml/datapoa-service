@@ -3,6 +3,8 @@ package com.service.datapoa.crud.linhaonibus.model;
 import com.service.datapoa.crud.linhaonibus.dao.jpa.LinhaOnibus;
 import com.service.datapoa.crud.linhaonibus.integration.LinhaOnibusResponse;
 
+import java.util.Objects;
+
 public class LinhaOnibusModel {
     private final Integer id;
     private final String codigo;
@@ -40,7 +42,23 @@ public class LinhaOnibusModel {
 
     @Override
     public String toString() {
-        final String template = "LinhaOnibusModel[id='%s', codigo='%s', nome='%s']";
+        final String template = "LinhaOnibusModel[id=%d, codigo='%s', nome='%s']";
         return String.format(template, this.id, this.codigo, this.nome);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof LinhaOnibusModel)) {
+            return false;
+        }
+        LinhaOnibusModel that = (LinhaOnibusModel) o;
+        return getId().equals(that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
