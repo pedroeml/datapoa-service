@@ -1,6 +1,7 @@
 package com.service.datapoa.crud.linhaonibus.rest;
 
 import com.service.datapoa.crud.Crud;
+import com.service.datapoa.crud.itinerario.dao.ItinerarioDAO;
 import com.service.datapoa.crud.linhaonibus.dao.LinhaOnibusDAO;
 import com.service.datapoa.crud.linhaonibus.dao.jpa.LinhaOnibus;
 import com.service.datapoa.crud.linhaonibus.mapper.LinhaOnibusMapper;
@@ -18,6 +19,9 @@ public class LinhaOnibusService implements Crud<LinhaOnibusModel> {
 
     @Autowired
     private LinhaOnibusDAO dao;
+
+    @Autowired
+    private ItinerarioDAO daoItinerario;
 
     @Autowired
     private LinhaOnibusRestService restService;
@@ -102,7 +106,7 @@ public class LinhaOnibusService implements Crud<LinhaOnibusModel> {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, reason);
             }
         } else {
-            // TODO: Call other DAO class for deleting entries on table ITINERARIO_UT with "DELETE FROM ITINERARIO_UT WHERE ID_LINHA = ?"
+            this.daoItinerario.deleteByIdLinha(Long.valueOf(id).intValue());
             this.delete(id);
         }
 
