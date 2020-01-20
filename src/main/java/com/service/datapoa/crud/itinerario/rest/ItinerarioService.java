@@ -1,31 +1,34 @@
 package com.service.datapoa.crud.itinerario.rest;
 
 import com.service.datapoa.crud.Crud;
+import com.service.datapoa.crud.itinerario.dao.ItinerarioDAO;
+import com.service.datapoa.crud.itinerario.dao.jpa.Itinerario;
 import com.service.datapoa.crud.itinerario.mapper.ItinerarioMapper;
 import com.service.datapoa.crud.itinerario.model.ItinerarioModel;
+import com.service.datapoa.crud.linhaonibus.dao.LinhaOnibusDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ItinerarioService implements Crud<ItinerarioModel> {
-    private static final String urlTemplate = "http://www.poatransporte.com.br/php/facades/process.php?a=il&p=%s";
 
     @Autowired
-    private RestTemplate restTemplate;
+    private ItinerarioDAO dao;
+
+    @Autowired
+    private LinhaOnibusDAO daoLinhaOnibus;
+
+    @Autowired
+    private ItinerarioRestService restService;
 
     @Override
     public ItinerarioModel findById(long id) {
-        final String url = String.format(urlTemplate, id);
-        final ResponseEntity<Map<String, Object>> untypedResponse = this.restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<Map<String, Object>>() { });
-        final Map<String, Object> body = untypedResponse.getBody();
-        return ItinerarioMapper.mapFromUntypedResponse(body);
+        final List<Itinerario> itinerario = this.dao.get(id);
+        return itinerario.isEmpty() ? this.restService.findById(id) : ItinerarioMapper.mapToModel(itinerario);
     }
 
     @Override
@@ -41,19 +44,54 @@ public class ItinerarioService implements Crud<ItinerarioModel> {
 
     @Override
     public ItinerarioModel update(long id, ItinerarioModel itinerarioModel) {
-        // TODO: Implementation
-        return null;
+        return this.replace(id, itinerarioModel);
     }
 
     @Override
     public ItinerarioModel replace(long id, ItinerarioModel itinerarioModel) {
-        // TODO: Implementation
-        return null;
+        final List<Itinerario> itinerarios = this.dao.get(id);
+        final ResponseStatusException e = this.validate(id, itinerarios, "update");
+
+        if (e != null) {
+            throw e;
+        } else {
+            this.dao.update(itinerarios, null);
+        }
+
+        return ItinerarioMapper.mapToModel(itinerarios);
     }
 
     @Override
     public ItinerarioModel delete(long id) {
-        // TODO: Implementation
-        return null;
+        final List<Itinerario> itinerarios = this.dao.get(id);
+        final ResponseStatusException e = this.validate(id, itinerarios, "delete");
+
+        if (e != null) {
+            throw e;
+        } else {
+            this.dao.delete(itinerarios);
+        }
+
+        return ItinerarioMapper.mapToModel(itinerarios);
+    }
+
+    private ResponseStatusException validate(long id, List<Itinerario> itinerarios, String operation) {
+        ResponseStatusException e = null;
+
+        if (itinerarios.isEmpty()) {
+            if (this.daoLinhaOnibus.get(id) == null) {
+                if (this.restService.findById(id) != null) {
+                    final String template = "Itinerario for LinhaOnibus ID %d exists only on external DB, thus you can't %s it unless you store a LinhaOnibus with ID %d into our DB.";
+                    final String reason = String.format(template, id, operation, id);
+                    e = new ResponseStatusException(HttpStatus.UNAUTHORIZED, reason);
+                }
+            } else {
+                final String template = "Itinerario for LinhaOnibus ID %d is empty, thus there's nothing to %s.";
+                final String reason = String.format(template, id, operation);
+                e = new ResponseStatusException(HttpStatus.NOT_MODIFIED, reason);
+            }
+        }
+
+        return e;
     }
 }
