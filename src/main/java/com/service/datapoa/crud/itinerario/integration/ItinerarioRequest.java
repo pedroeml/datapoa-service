@@ -6,39 +6,21 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ItinerarioRequest {
-    private String id;
-    private String codigo;
-    private String nome;
+    private Integer id;
     private List<CoordenadaRequest> coordenadas;
 
     public ItinerarioRequest() { }
 
-    public String getId() {
-        return id;
+    public Integer getId() {
+        return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public List<CoordenadaRequest> getCoordenadas() {
-        return coordenadas;
+        return this.coordenadas;
     }
 
     public void setCoordenadas(List<CoordenadaRequest> coordenadas) {
@@ -47,7 +29,7 @@ public class ItinerarioRequest {
 
     @Override
     public String toString() {
-        final String template = "ItinerarioRequest[id=%s, codigo='%s', nome='%s']";
-        return String.format(template, this.id, this.codigo, this.nome);
+        final String template = "ItinerarioRequest[id=%d, coordenadas.size=%d]";
+        return String.format(template, this.id, this.coordenadas != null ? this.coordenadas.size() : 0);
     }
 }
