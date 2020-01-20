@@ -23,7 +23,8 @@ public class PontoTaxiService implements Crud<PontoTaxiModel> {
         final PontoTaxi ponto = this.dao.get(id);
 
         if (ponto == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("PontoTaxi ID %d not found", id));
+            final String reason = String.format("PontoTaxi ID %d not found.", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, reason);
         }
 
         return ponto;
