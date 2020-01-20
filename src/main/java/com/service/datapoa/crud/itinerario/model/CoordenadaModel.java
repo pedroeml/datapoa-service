@@ -10,11 +10,11 @@ public class CoordenadaModel {
     }
 
     public String getLat() {
-        return lat;
+        return this.lat;
     }
 
     public String getLng() {
-        return lng;
+        return this.lng;
     }
 
     @Override
