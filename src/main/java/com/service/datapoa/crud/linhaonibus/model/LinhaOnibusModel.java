@@ -53,7 +53,7 @@ public class LinhaOnibusModel {
         } else if (!(o instanceof LinhaOnibusModel)) {
             return false;
         }
-        LinhaOnibusModel that = (LinhaOnibusModel) o;
+        final LinhaOnibusModel that = (LinhaOnibusModel) o;
         return getId().equals(that.getId());
     }
 
