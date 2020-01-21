@@ -38,8 +38,17 @@ public class ItinerarioService implements Crud<ItinerarioModel> {
 
     @Override
     public ItinerarioModel add(ItinerarioModel itinerarioModel) {
-        // TODO: Implementation
-        return null;
+        List<Itinerario> itinerarios = this.dao.get(itinerarioModel.getId());
+        final ResponseStatusException e = this.validate(itinerarioModel.getId(), itinerarios, "save");
+
+        if (e != null) {
+            throw e;
+        } else {
+            itinerarios = ItinerarioMapper.mapToDAO(itinerarioModel);
+            this.dao.save(itinerarios);
+        }
+
+        return ItinerarioMapper.mapToModel(itinerarios);
     }
 
     @Override
@@ -49,12 +58,13 @@ public class ItinerarioService implements Crud<ItinerarioModel> {
 
     @Override
     public ItinerarioModel replace(long id, ItinerarioModel itinerarioModel) {
-        final List<Itinerario> itinerarios = this.dao.get(id);
+        List<Itinerario> itinerarios = this.dao.get(id);
         final ResponseStatusException e = this.validate(id, itinerarios, "update");
 
         if (e != null) {
             throw e;
         } else {
+            itinerarios = ItinerarioMapper.mapToDAO(itinerarioModel);
             this.dao.update(itinerarios, null);
         }
 
